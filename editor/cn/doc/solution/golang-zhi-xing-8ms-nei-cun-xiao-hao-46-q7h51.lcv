@@ -1,0 +1,91 @@
+### 解题思路
+
+此处撰写解题思路
+
+粗略写一下自己的思路
+1. 遍历这两个链表 l1, l2 （无论怎么写，遍历链表是必须的）
+   定义指针 next1, next2,  分别表示两个链表当前节点的 Next 字段， 循环条件 next1 != nil || next2 !=nil.从而遍历链表.
+
+2. 给returnNode （两链表之和）增加节点
+   定义指针 nextPtr, 表示 returnNode的尾节点, 即nextPtr.Next 一定为nil,
+   2.1 给 nextPtr.Next 的赋值来增加returnNode 的节点，
+   2.2 重置 nextPtr 的值,
+
+3. 考虑 10 进 1
+
+4. 考虑 [5],[5] = 0,1 的情况
+   循环条件加上 || i == 1
+
+### 代码
+
+* golang
+
+```golang
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+
+    var (
+        next1 *ListNode
+        next2 *ListNode
+
+        returnNode *ListNode
+
+        nextPtr *ListNode
+
+        i int
+    )
+    next1 = l1.Next
+    next2 = l2.Next
+    returnNode = &ListNode{
+        Val: l1.Val + l2.Val,
+        Next: nil,
+    }
+    if returnNode.Val - 10 >= 0 {
+        returnNode.Val -= 10
+        i = 1
+    }
+    
+
+    for next1 != nil || next2 !=nil || i == 1{
+        newNext := &ListNode{}
+
+        if next1 != nil {
+           newNext.Val += next1.Val
+           next1 =  next1.Next
+        }
+
+        if next2 != nil {
+           newNext.Val += next2.Val
+           next2 =  next2.Next
+        }
+
+        if (i == 1){
+            newNext.Val += 1
+            i = 0
+        }
+
+        if newNext.Val - 10 >= 0 {
+            newNext.Val -= 10
+            i = 1
+        }
+        
+        if returnNode.Next == nil {
+          returnNode.Next = newNext
+        } else {
+            nextPtr.Next = newNext
+        }
+        nextPtr = newNext
+    }
+
+    return returnNode
+}
+
+
+```
+
