@@ -1,0 +1,59 @@
+### 解题思路
+
+此处撰写解题思路
+abcabcdbcdefg
+(abc)**a**bcdbcdefg
+**a**(bca)**b**cdbcdefg
+a**b**(cab)**c**dbcdefg
+ab**c**(abcd)**b**cdefg
+abca**b**(cdb)**c**defg
+abcab**c**(dbc)**d**efg
+abcabc**d**(bcdefg)
+1. 设置两个标点记录不重复的字符串的起始位置f1和结束位置f2，初始位置都是0
+2. 用一个集合来判断字符串是否重复,同时记录下每个字符的位置，便于查找字符的位置
+3. 从前往后遍历，如果字符不重复，f2往后移，即f2+1；当第一次遇到重复的字符时，计算f1,f2之间的长度，这是其中一段不重复字符的长度，记录下来
+4. 找到重复的前一个字符的位置，将起始位置f1移动到重复的前一个字符的下一个位置，删除集合中的此位置f1之前的字符
+5. 继续遍历直到结束，最后计算出最后一个f1到f2的长度，记录下来
+6. 比较得到的几段长度，最大的长度就是结果
+
+### 代码
+
+* golang
+
+```golang
+func lengthOfLongestSubstring(s string) int {
+	if len(s) == 0 {
+		return 0
+	}
+	num := 0
+	arr := []byte(s)
+	var flag1, flag2 int
+	m := map[byte]int{}
+	for i := 0; i < len(arr); i++ {
+		v := arr[i]
+		if _, ok := m[v]; ok {
+			length := flag2 - flag1 + 1
+			if num < length {
+				num = length
+			}
+			flag1 = m[v] + 1
+			// 删除m[v]+1前面的
+			for k, v := range m {
+				if v < flag1 {
+					delete(m, k)
+				}
+			}
+		}
+		m[v] = i
+		flag2 = i
+
+	}
+	length := flag2 - flag1 + 1
+	if num < length {
+		num = length
+	}
+	return num
+
+}
+```
+
