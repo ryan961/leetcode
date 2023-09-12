@@ -1,4 +1,4 @@
-package algorithm
+package main
 
 // [4] Median of Two Sorted Arrays ( median-of-two-sorted-arrays )
 //Given two sorted arrays nums1 and nums2 of size m and n respectively, return

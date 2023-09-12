@@ -1,4 +1,4 @@
-package algorithm
+package main
 
 // [2] Add Two Numbers ( add-two-numbers )
 //You are given two non-empty linked lists representing two non-negative
