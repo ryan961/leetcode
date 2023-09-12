@@ -1,4 +1,4 @@
-package main
+package algorithm
 
 // [4] Median of Two Sorted Arrays ( median-of-two-sorted-arrays )
 //Given two sorted arrays nums1 and nums2 of size m and n respectively, return
@@ -39,43 +39,52 @@ package main
 
 // leetcode submit region begin(Prohibit modification and deletion)
 func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
-	mid1 := nums1[:len(nums1)/2+1]
-	mid2 := nums2[:len(nums2)/2+1]
+	if len(nums1) == 0 && len(nums2) == 0 {
+		return float64(0)
+	}
 
-	var index1, index2 = -1, -1
+	var (
+		index1, index2 = 0, 0
+	)
 
 	merge := make([]int, 0, (len(nums1)+len(nums2))/2+1)
-Loop:
-	for index1 < len(mid1) {
-		index1++
-
-	Internal:
-		for index2 < len(mid2) {
+	for len(merge) < ((len(nums1)+len(nums2))/2 + 1) {
+		// 边界问题
+		if index1 == len(nums1) { // mid1边界
+			merge = append(merge, nums2[index2])
 			index2++
+			continue
+		}
+		if index2 == len(nums2) { // mid2边界
+			merge = append(merge, nums1[index1])
+			index1++
+			continue
+		}
 
-			if len(merge) == (len(nums1)+len(nums2))/2+1 {
-				if (len(nums1)+len(nums2))%2 == 0 {
+		if nums1[index1] < nums2[index2] {
+			merge = append(merge, nums1[index1])
 
-				}
-			}
+			index1++
+		} else if nums1[index1] > nums2[index2] {
+			merge = append(merge, nums2[index2])
 
-			if mid1[index1] < mid2[index2] {
-				merge = append(merge, mid1[index1])
-
-				continue Loop
-			} else if mid1[index1] > mid2[index2] {
-				merge = append(merge, mid2[index2])
-
-				continue Internal
+			index2++
+		} else {
+			if len(merge) == (len(nums1)+len(nums2))/2 { // 最后只需要补一个
+				merge = append(merge, nums1[index1])
 			} else {
-				merge = append(merge, mid1[index1], mid2[index2])
-
-				continue Loop
+				merge = append(merge, nums1[index1], nums2[index2])
 			}
 
+			index1++
+			index2++
 		}
 	}
 
+	if (len(nums1)+len(nums2))%2 == 0 {
+		return float64(merge[len(merge)-1]+merge[len(merge)-2]) / 2.0
+	}
+	return float64(merge[len(merge)-1])
 }
 
 //leetcode submit region end(Prohibit modification and deletion)

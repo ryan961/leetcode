@@ -1,4 +1,4 @@
-package main
+package algorithm
 
 // [1] 两数之和 ( two-sum )
 /**
